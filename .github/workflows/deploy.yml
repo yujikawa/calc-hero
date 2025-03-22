@@ -1,0 +1,29 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Rust + wasm target
+        run: |
+          rustup target add wasm32-unknown-unknown
+
+      - name: Build wasm
+        run: |
+          cargo build --target wasm32-unknown-unknown --release
+          mkdir -p static
+          cp target/wasm32-unknown-unknown/release/*.wasm static/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./static
