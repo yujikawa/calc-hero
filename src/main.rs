@@ -17,8 +17,8 @@ async fn main() {
     let player_y = screen_height() - player_height;
 
     // 数式
-    let mut a = gen_range(1, 100); // 1〜99
-    let mut b = gen_range(1, 10); // 1〜9
+    let mut a = gen_range(1, 10); // 1〜99
+    let mut b = gen_range(1, 100); // 1〜9
     let mut correct_on_left = gen_range(0, 2) == 0; // 0: left 1: right
     let mut noise = gen_range(1, 5);
     let mut correct_ans = a * b;
@@ -165,8 +165,8 @@ async fn main() {
                 selection_made = false;
                 selection_timer = 0.0;
 
-                a = gen_range(1, 100); // 1〜9
-                b = gen_range(1, 10); // 1〜9
+                a = gen_range(1, 10); // 1〜9
+                b = gen_range(1, 100); // 1〜9
                 correct_on_left = gen_range(0, 2) == 0; // 0: left 1: right
                 noise = gen_range(1, 5);
                 correct_ans = a * b;
