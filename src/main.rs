@@ -139,6 +139,7 @@ async fn main() {
         } else {
             selection_timer += dt;
             if selection_timer >= 2.0 {
+                srand(get_time() as u64);
                 selection_made = false;
                 selection_timer = 0.0;
 
