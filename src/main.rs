@@ -10,13 +10,15 @@ async fn main() {
     let background_texture = load_texture("school_bg.png").await.unwrap(); // 背景画像を読み込み
     player_texture.set_filter(FilterMode::Nearest); // ドット感を保つ設定（必要なら）
 
-    let mut bg_y = 0.0;
-    let scroll_speed = 100.0;
+    // 背景の設定
+    let bg_y = 0.0;
+    let bg_x = screen_width() / 2.0 - background_texture.width() / 2.0;
+
     // プレイヤーを画面中央に固定（参照渡し）
     let scale = 0.5;
     let player_width = player_texture.width() * scale;
     let player_height = player_texture.height() * scale;
-    let mut player_x = screen_width() / 2.0 - player_width / 2.0;
+    let player_x = screen_width() / 2.0 - player_width / 2.0;
     let player_y = screen_height() - player_height;
 
     // 数式
@@ -39,38 +41,10 @@ async fn main() {
 
     loop {
         let dt = get_frame_time();
-        // bg_y += scroll_speed * dt;
-
-        // if bg_y >= background_texture.height() {
-        //     bg_y -= background_texture.height();
-        // }
 
         // 背景を2枚描画（参照渡し）
-        let bg_x = screen_width() / 2.0 - background_texture.width() / 2.0;
+
         draw_texture(&background_texture, bg_x, bg_y, WHITE);
-        draw_texture(
-            &background_texture,
-            bg_x,
-            bg_y - background_texture.height(),
-            WHITE,
-        );
-
-        // プレイヤーの描画
-        // let move_speed = 200.0;
-        // if is_key_down(KeyCode::Left) {
-        //     player_x -= move_speed * dt;
-        // }
-        // if is_key_down(KeyCode::Right) {
-        //     player_x += move_speed * dt;
-        // }
-
-        // 画面外に出ないように制限
-        let bg_x = screen_width() / 2.0 - background_texture.width() / 2.0;
-
-        let min_x = bg_x;
-        let max_x = bg_x + background_texture.width() - player_width;
-
-        player_x = player_x.clamp(min_x, max_x);
 
         draw_texture_ex(
             &player_texture,
