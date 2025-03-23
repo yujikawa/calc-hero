@@ -1,8 +1,11 @@
+use macroquad::rand::srand;
+use macroquad::time::get_time;
 use macroquad::{prelude::*, rand::gen_range};
 
 #[macroquad::main("BasicShapes")]
 async fn main() {
     // キャラ画像を読み込む
+    srand(get_time() as u64);
     let player_texture = load_texture("student.png").await.unwrap();
     let background_texture = load_texture("school_bg.png").await.unwrap(); // 背景画像を読み込み
     player_texture.set_filter(FilterMode::Nearest); // ドット感を保つ設定（必要なら）
