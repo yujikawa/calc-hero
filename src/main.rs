@@ -19,7 +19,7 @@ async fn main() {
     let player_width = player_texture.width() * scale;
     let player_height = player_texture.height() * scale;
     let player_x = screen_width() / 2.0 - player_width / 2.0;
-    let player_y = screen_height() - player_height;
+    let player_y = background_texture.height() / 2.0;
 
     // 数式
     let mut a = gen_range(1, 100); // 1〜99
@@ -66,62 +66,72 @@ async fn main() {
         // 仮の数字パネル
 
         // パネルサイズ
-        let panel_width = 300.0;
-        let panel_height = 120.0;
+        let answer_panel_width = 300.0;
+        let answer_panel_height = 120.0;
 
         // Y位置（プレイヤーのちょい前くらい）
-        let panel_y = screen_height() / 1.0 - player_height / 2.0 - 80.0;
+        let answer_panel_y = screen_height() / 1.0 - player_height / 2.0 - 80.0;
 
         // 左パネル
-        let left_x = screen_width() / 3.0 - panel_width / 2.0;
-        draw_rectangle(left_x, panel_y, panel_width, panel_height, translucent_gray);
+        let left_panel_x = screen_width() / 3.0 - answer_panel_width / 2.0;
+        draw_rectangle(
+            left_panel_x,
+            answer_panel_y,
+            answer_panel_width,
+            answer_panel_height,
+            translucent_gray,
+        );
         draw_text(
             &left_value.to_string(),
-            left_x + 100.0,
-            panel_y + 80.0,
+            left_panel_x + 100.0,
+            answer_panel_y + 80.0,
             100.0,
             WHITE,
         );
 
         // 右パネル
-        let right_x = screen_width() * 3.0 / 4.5 - panel_width / 2.0;
+        let right_panel_x = screen_width() * 3.0 / 4.5 - answer_panel_width / 2.0;
         draw_rectangle(
-            right_x,
-            panel_y,
-            panel_width,
-            panel_height,
+            right_panel_x,
+            answer_panel_y,
+            answer_panel_width,
+            answer_panel_height,
             translucent_gray,
         );
         draw_text(
             &right_value.to_string(),
-            right_x + 100.0,
-            panel_y + 80.0,
+            right_panel_x + 100.0,
+            answer_panel_y + 80.0,
             100.0,
             WHITE,
         );
 
         // お題パネル
-        // お題
-
         // パネルサイズ
-        let panel_width = 400.0;
-        let panel_height = 100.0;
+        let question_panel_width = 400.0;
+        let question_panel_height = 100.0;
 
         // 表示位置（中央上部）
-        let panel_x = screen_width() / 2.0 - panel_width / 2.0;
-        let panel_y = 30.0;
+        let question_panel_x = screen_width() / 2.0 - question_panel_width / 2.0;
+        let question_panel_y = 30.0;
 
         // 黒い背景（不透明 or 透過）
         let panel_color = Color::new(0.0, 0.0, 0.0, 0.8); // ← 0.8で少し透過
 
         // 背景パネル
-        draw_rectangle(panel_x, panel_y, panel_width, panel_height, panel_color);
+        draw_rectangle(
+            question_panel_x,
+            question_panel_y,
+            question_panel_width,
+            question_panel_height,
+            panel_color,
+        );
 
         // テキストを中央に表示
         let text_size = 80.0;
         let text_metrics = measure_text(&question_text, None, text_size as u16, 1.0);
-        let text_x = panel_x + (panel_width - text_metrics.width) / 2.0;
-        let text_y = panel_y + panel_height / 2.0 + text_metrics.height / 2.5;
+        let text_x = question_panel_x + (question_panel_width - text_metrics.width) / 2.0;
+        let text_y = question_panel_y + question_panel_height / 2.0 + text_metrics.height / 2.5;
 
         draw_text(&question_text, text_x, text_y, text_size, WHITE);
 
@@ -135,6 +145,31 @@ async fn main() {
                 selection_made = true;
                 is_correct = !correct_on_left;
                 selection_timer = 0.0; // タイマー開始
+            }
+
+            if is_mouse_button_pressed(MouseButton::Left) {
+                let (mx, my) = mouse_position();
+                // 左のパネルが押されたか判定
+                if mx >= left_panel_x
+                    && mx <= left_panel_x + answer_panel_width
+                    && my >= answer_panel_y
+                    && my <= answer_panel_y + answer_panel_height
+                {
+                    selection_made = true;
+                    is_correct = correct_on_left;
+                    selection_timer = 0.0;
+                }
+
+                // 右のパネルが押されたか判定
+                if mx >= right_panel_x
+                    && mx <= right_panel_x + answer_panel_width
+                    && my >= answer_panel_y
+                    && my <= answer_panel_y + answer_panel_height
+                {
+                    selection_made = true;
+                    is_correct = !correct_on_left;
+                    selection_timer = 0.0;
+                }
             }
         } else {
             selection_timer += dt;
