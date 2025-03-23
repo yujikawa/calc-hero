@@ -39,11 +39,11 @@ async fn main() {
 
     loop {
         let dt = get_frame_time();
-        bg_y += scroll_speed * dt;
+        // bg_y += scroll_speed * dt;
 
-        if bg_y >= background_texture.height() {
-            bg_y -= background_texture.height();
-        }
+        // if bg_y >= background_texture.height() {
+        //     bg_y -= background_texture.height();
+        // }
 
         // 背景を2枚描画（参照渡し）
         let bg_x = screen_width() / 2.0 - background_texture.width() / 2.0;
